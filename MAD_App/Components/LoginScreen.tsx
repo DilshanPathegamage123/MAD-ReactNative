@@ -1,6 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
 import { NavigationProp } from "@react-navigation/native";
+import styles from "./Styles/Styles";
 
 interface Props {
   navigation: NavigationProp<any>;
@@ -11,60 +18,42 @@ export default function LoginScreen({ navigation }: Props) {
   const [password, setPassword] = useState("");
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login Screen</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button
-        title="Login"
-        onPress={() => {
-          /* Handle login */
-        }}
-      />
-      <Text
-        style={styles.textclass}
-        onPress={() => navigation.navigate("Registration")}
-      >
-        Create Account
-      </Text>
-    </View>
+    <ImageBackground
+      source={require("../assets/backgroundimg5.jpg")}
+      style={styles.background}
+    >
+      <View style={styles.overlay} />
+      <View style={styles.container}>
+        <Text style={styles.heading}>fitTrack</Text>
+        <Text style={styles.title}>Welcome to fitTrack</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            /* Handle login */
+          }}
+        >
+          <Text style={styles.buttonText}>Signin</Text>
+        </TouchableOpacity>
+        <Text
+          style={styles.textClass}
+          onPress={() => navigation.navigate("Registration")}
+        >
+          Create Account
+        </Text>
+      </View>
+    </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 16,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-  },
-  input: {
-    width: "100%",
-    padding: 8,
-    marginVertical: 8,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-  },
-
-  textclass: {
-    color: "blue",
-    fontSize: 15,
-    marginTop: 15,
-  },
-});

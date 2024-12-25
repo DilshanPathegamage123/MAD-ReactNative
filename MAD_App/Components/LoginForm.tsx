@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { NavigationProp } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../Styles/Styles";
 
 interface Props {
@@ -11,12 +12,32 @@ export default function LoginForm({ navigation }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please fill in all fields");
       return;
     }
-    navigation.navigate("Home", { username: email });
+
+    try {
+      const storedCredentials = await AsyncStorage.getItem("userCredentials");
+      if (storedCredentials) {
+        const {
+          email: storedEmail,
+          password: storedPassword,
+          userName : storedUserName,
+        } = JSON.parse(storedCredentials);
+        if (email === storedEmail && password === storedPassword) {
+          Alert.alert("Success", "User logged in successfully");
+          navigation.navigate("Home", { username: storedUserName });
+        } else {
+          Alert.alert("Error", "Invalid email or password");
+        }
+      } else {
+        Alert.alert("Error", "No user found. Please register first.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Failed to retrieve user credentials");
+    }
   };
 
   return (

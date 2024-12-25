@@ -12,7 +12,11 @@ interface ExerciseCardProps {
   onRemove: () => void;
 }
 
-const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onAdd, onRemove }) => {
+const ExerciseCard: React.FC<ExerciseCardProps> = ({
+  exercise,
+  onAdd,
+  onRemove,
+}) => {
   const [isAdded, setIsAdded] = useState(false);
 
   const handleToggle = () => {

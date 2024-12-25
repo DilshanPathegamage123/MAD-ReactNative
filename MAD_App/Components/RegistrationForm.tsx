@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { NavigationProp } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "../Styles/Styles";
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 
 export default function RegistrationForm({ navigation }: Props) {
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -23,7 +25,7 @@ export default function RegistrationForm({ navigation }: Props) {
     return re.test(password);
   };
 
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
     if (!email || !password || !confirmPassword) {
       Alert.alert("Error", "Please fill in all fields");
       return;
@@ -43,7 +45,17 @@ export default function RegistrationForm({ navigation }: Props) {
       Alert.alert("Error", "Passwords do not match");
       return;
     }
-    // Handle registration
+
+    try {
+      await AsyncStorage.setItem(
+        "userCredentials",
+        JSON.stringify({ email, password, userName })
+      );
+      Alert.alert("Success", "User registered successfully");
+      navigation.navigate("Login");
+    } catch (error) {
+      Alert.alert("Error", "Failed to save user credentials");
+    }
   };
 
   return (
@@ -55,6 +67,12 @@ export default function RegistrationForm({ navigation }: Props) {
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="UserName"
+        value={userName}
+        onChangeText={setUserName}
       />
       <TextInput
         style={styles.input}
